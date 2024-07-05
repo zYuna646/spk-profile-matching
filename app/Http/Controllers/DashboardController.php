@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Province;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,6 +14,7 @@ class DashboardController extends Controller
 
   public function peserta()
   {
-    return view('content.dashboard.dashboards-peserta');
+    $provinsi = Province::all();
+    return view('content.dashboard.dashboards-peserta', compact('provinsi'));
   }
 }

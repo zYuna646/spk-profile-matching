@@ -34,6 +34,10 @@ class Peserta extends Model
     'file_penghargaan',
     'status',
     'pendaftaran_id',
+    'status_berkas',
+    'provinsi_id',
+    'kabupaten_id',
+    'foto',
   ];
 
   protected $casts = [

@@ -55,6 +55,26 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="gender" class="form-label">Jenis Kelamin</label>
+                        <select class="form-select @error('gender') is-invalid @enderror" id="gender" name="gender"
+                            required>
+                            <option value="">Pilih jenis kelamin</option>
+                            <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                        @error('gender')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthdate" class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control @error('birthdate') is-invalid @enderror" id="birthdate"
+                            name="birthdate" required value="{{ old('birthdate') }}">
+                        @error('birthdate')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label" for="basic-default-password13">Konfirmasi Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peserta;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,6 +50,7 @@ class VerificatorController extends Controller
 
   public function edit(User $user)
   {
+    dd($user);
     return view('admin.administrator.edit', compact('user'));
   }
 
@@ -95,6 +97,24 @@ class VerificatorController extends Controller
     $user->delete();
     return redirect()
       ->route('administrator.users.index')
+      ->with('success', 'Berhasil Ditambahkan');
+  }
+
+  public function accept($id)
+  {
+    $peserta = Peserta::find($id);
+    $peserta->status_berkas = 'terima';
+    return redirect()
+      ->route('pendaftaran.periode.index')
+      ->with('success', 'Berhasil Ditambahkan');
+  }
+
+  public function reject($id)
+  {
+    $peserta = Peserta::find($id);
+    $peserta->status_berkas = 'tolak';
+    return redirect()
+      ->route('pendaftaran.periode.index')
       ->with('success', 'Berhasil Ditambahkan');
   }
 }

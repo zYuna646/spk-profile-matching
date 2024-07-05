@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaiController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\VerificatorController;
+use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -126,8 +130,13 @@ Route::get('/auth/register', [AuthController::class, 'register'])->name('registe
 Route::post('/auth/register', [AuthController::class, 'create'])->name('register.submit');
 Route::get('/auth/forgot', [AuthController::class, 'forgot'])->name('forgot');
 Route::get('/auth/profile', [AuthController::class, 'profile'])->name('profile');
-Route::post('/auth/update', [AuthController::class, 'update'])->name('update');
+Route::put('/auth/update', [AuthController::class, 'update'])->name('update');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/get-provinsi', [WilayahController::class, 'getProvinsi'])->name('getProvinsi');
+Route::get('/get-kabupaten/{idProvinsi}', [WilayahController::class, 'getKabupaten'])->name('getKabupaten');
+Route::get('/get-kecamatan/{idKabupaten}', [WilayahController::class, 'getKecamatan'])->name('getKecamatan');
+Route::get('/get-kelurahan/{idKelurahan}', [WilayahController::class, 'getKelurahan'])->name('getKelurahan');
 
 // dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -158,3 +167,22 @@ Route::prefix('peserta')
     Route::get('users/status/{status}', [PesertaController::class, 'status'])->name('users.status');
     Route::resource('users', PesertaController::class);
   });
+
+Route::prefix('pendaftaran')
+  ->name('pendaftaran.')
+  ->group(function () {
+    Route::resource('periode', PeriodeController::class);
+  });
+
+Route::prefix('pendaftaran')
+  ->name('pendaftaran.')
+  ->group(function () {
+    Route::get('berkas/filter', [PesertaController::class, 'filter'])->name('berkas.filter');
+    Route::post('berkas/terima', [VerificatorController::class, 'accept'])->name('berkas.terima');
+    Route::post('berkas/tolak', [VerificatorController::class, 'reject'])->name('berkas.tolak');
+
+    Route::resource('berkas', BerkasController::class);
+  });
+
+Route::resource('alumni', AlumniController::class);
+Route::post('peserta/berkas/update', [PesertaController::class, 'updateBerkas'])->name('peserta.berkas.update');

@@ -12,6 +12,7 @@ return new class extends Migration {
   {
     Schema::create('pesertas', function (Blueprint $table) {
       $table->id();
+      $table->string('foto')->nullable();
       $table
         ->foreignId('user_id')
         ->constrained('users')
@@ -41,6 +42,20 @@ return new class extends Migration {
       $table->json('file_kegiatan_sosial')->nullable();
       $table->string('file_score_report')->nullable();
       $table->json('file_penghargaan')->nullable();
+      $table->enum('status_berkas', ['belum', 'proses', 'tolak', 'terima'])->default('belum');
+      $table->string('kabupaten_id')->nullable();
+      $table->string('provinsi_id')->nullable();
+      $table
+        ->foreign('kabupaten_id')
+        ->references('id')
+        ->on('regencies')
+        ->onDelete('cascade');
+      $table
+        ->foreign('provinsi_id')
+        ->references('id')
+        ->on('provinces')
+        ->onDelete('cascade');
+
       $table
         ->enum('status', [
           'peserta-baru',

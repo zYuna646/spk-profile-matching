@@ -47,7 +47,7 @@ class AuthController extends Controller
 
     // Create the associated Peserta record
     $pendaftaran = Pendaftaran::find($request->pendaftaran_id);
-    $peserta = Peserta::create([
+    Peserta::create([
       'user_id' => $user->id,
       'jk' => $request->gender, // Menyimpan jenis kelamin dari input form
       'tgl_lahir' => $request->birthdate, // Menyimpan tanggal lahir dari input form
@@ -73,23 +73,23 @@ class AuthController extends Controller
     if (Auth::attempt($credential)) {
       $request->session()->regenerate();
       $role = Auth::user()->role->name;
-      return redirect()->intended('/dashboard');
+      // return redirect()->intended('/dashboard');
 
-      //   switch ($role) {
-      //     case 'admin':
-      //       return redirect()->intended('/dashboard/admin');
-      //     case 'dosen':
-      //       return redirect()->intended('/dashboard/dpl');
-      //     case 'mahasiswa':
-      //       return redirect()->intended('/dashboard/student');
-      //     case 'guru':
-      //       return redirect()->intended('/dashboard/pamong');
-      //     case 'operator':
-      //       return redirect()->intended('/dashboard/operator');
-      //     // Add more cases for other roles if needed
-      //     default:
-      //       return redirect()->intended('/dashboard_default');
-      //   }
+      switch ($role) {
+        case 'peserta':
+          return redirect()->intended('/dashboard/peserta');
+        case 'dosen':
+          return redirect()->intended('/dashboard/dpl');
+        case 'mahasiswa':
+          return redirect()->intended('/dashboard/student');
+        case 'guru':
+          return redirect()->intended('/dashboard/pamong');
+        case 'operator':
+          return redirect()->intended('/dashboard/operator');
+        // Add more cases for other roles if needed
+        default:
+          return redirect()->intended('/dashboard');
+      }
     }
 
     return back()->with('loginError', 'Username Atau Password Salah');
@@ -103,11 +103,32 @@ class AuthController extends Controller
 
   public function profile()
   {
-    return view('content.pages.profile');
+    return view('admin.peserta.account');
   }
 
-  public function update(User $user)
+  public function update(Request $request, User $user)
   {
-    return view('content.pages.profile');
+    $user = Auth::user();
+    // Validate the request data
+    $request->validate([
+      'name' => 'required|string|max:255',
+      'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+      'password' => 'nullable|string|min:8|confirmed',
+      'alamat' => 'nullable|string',
+    ]);
+
+    // Update the user details
+    $user->name = $request->input('name');
+    $user->email = $request->input('email');
+    if ($request->filled('password')) {
+      $user->password = bcrypt($request->input('password'));
+    }
+    $user->alamat = $request->input('alamat');
+    $user->save();
+
+    // Redirect back with a success message
+    return redirect()
+      ->route('profile', $user)
+      ->with('success', 'Profile updated successfully.');
   }
 }
