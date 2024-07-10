@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
     // ]);
 
     //Role Seeder
+    $this->call(IndoRegionSeeder::class);
+    $this->call(KriteriaSeeder::class);
     $admin = Role::create([
       'name' => 'Admin',
     ]);
