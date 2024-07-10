@@ -14,34 +14,26 @@
     <div class="row">
         <div class="col-lg-8 mb-4">
             <!-- Progress Bar -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Progress Peserta</h5>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%;" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100">Lengkapi Berkas</div>
-                    </div>
-                </div>
-            </div>
+
+
             <!--/ Progress Bar -->
+            @php
+                $user = Auth::user();
+                $peserta = $user->peserta;
+            @endphp
 
             @if ($status === 'tolak')
                 <!-- Komentar Jika Ditolak -->
                 <div class="card mt-4">
                     <div class="card-body">
-                        <h5 class="card-title">Komentar Jika Ditolak</h5>
-                        <p>Berkas Anda belum lengkap. Silakan lengkapi berkas Anda sesuai dengan petunjuk yang diberikan.
-                        </p>
-                        <a href="#" class="btn btn-sm btn-outline-danger">Revisi Berkas</a>
+                        <h5 class="card-title">Ditolak</h5>
+                        <p{{ $peserta->msg }} </p>
                     </div>
                 </div>
                 <!--/ Komentar Jika Ditolak -->
             @endif
 
-            @php
-                $user = Auth::user();
-                $peserta = $user->peserta;
-            @endphp
+
 
 
             <!-- Formulir Utama dengan Tab -->
@@ -75,9 +67,14 @@
                                     <label for="foto" class="form-label">Upload Foto</label>
                                     <input type="file" class="form-control" id="foto" name="foto"
                                         accept="image/*">
-
-                                    <img id="fotoPreview" src="#" alt="Foto Preview"
-                                        style="display: none; max-width: 200px; margin-top: 10px;" />
+                                    @if ($peserta && $peserta->foto)
+                                        <img id="fotoPreview" src="{{ asset('storage/fotos/' . $peserta->foto) }}"
+                                            alt="Foto Preview"
+                                            style="display: block; max-width: 200px; margin-top: 10px;" />
+                                    @else
+                                        <img id="fotoPreview" src="#" alt="Foto Preview"
+                                            style="display: none; max-width: 200px; margin-top: 10px;" />
+                                    @endif
                                     @error('foto')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -85,8 +82,10 @@
                                 <div class="mb-3">
                                     <label for="jk" class="form-label">Jenis Kelamin</label>
                                     <select class="form-select" id="jk" name="jk">
-                                        <option value="L" {{ old('jk') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                                        <option value="P" {{ old('jk') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                        <option value="L" {{ old('jk', $peserta->jk ?? '') == 'L' ? 'selected' : '' }}>
+                                            Laki-laki</option>
+                                        <option value="P" {{ old('jk', $peserta->jk ?? '') == 'P' ? 'selected' : '' }}>
+                                            Perempuan</option>
                                     </select>
                                     @error('jk')
                                         <div class="text-danger">{{ $message }}</div>
@@ -95,7 +94,7 @@
                                 <div class="mb-3">
                                     <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
                                     <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir"
-                                        value="{{ old('tgl_lahir') }}">
+                                        value="{{ old('tgl_lahir', $peserta->tgl_lahir ?? '') }}">
                                     @error('tgl_lahir')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -103,7 +102,7 @@
                                 <div class="mb-3">
                                     <label for="agama" class="form-label">Agama</label>
                                     <input type="text" class="form-control" id="agama" name="agama"
-                                        value="{{ old('agama') }}">
+                                        value="{{ old('agama', $peserta->agama ?? '') }}">
                                     @error('agama')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -111,7 +110,7 @@
                                 <div class="mb-3">
                                     <label for="asal" class="form-label">Asal</label>
                                     <input type="text" class="form-control" id="asal" name="asal"
-                                        value="{{ old('asal') }}">
+                                        value="{{ old('asal', $peserta->asal ?? '') }}">
                                     @error('asal')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -122,8 +121,8 @@
                                         <option value="">Pilih Provinsi</option>
                                         @foreach ($provinsi as $prov)
                                             <option value="{{ $prov->id }}"
-                                                {{ old('provinsi') == $prov->id ? 'selected' : '' }}>{{ $prov->name }}
-                                            </option>
+                                                {{ old('provinsi', $peserta->provinsi_id ?? '') == $prov->id ? 'selected' : '' }}>
+                                                {{ $prov->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('provinsi')
@@ -142,7 +141,7 @@
                                 <div class="mb-3">
                                     <label for="no_tlp" class="form-label">Nomor Telepon</label>
                                     <input type="text" class="form-control" id="no_tlp" name="no_tlp"
-                                        value="{{ old('no_tlp') }}">
+                                        value="{{ old('no_tlp', $peserta->no_tlp ?? '') }}">
                                     @error('no_tlp')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -150,7 +149,7 @@
                                 <div class="mb-3">
                                     <label for="sosial_media" class="form-label">Akun Media Sosial</label>
                                     <input type="text" class="form-control" id="sosial_media" name="sosial_media"
-                                        value="{{ old('sosial_media') }}">
+                                        value="{{ old('sosial_media', $peserta->sosial_media ?? '') }}">
                                     @error('sosial_media')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -158,21 +157,21 @@
                                 <div class="mb-3">
                                     <label for="pekerjaan" class="form-label">Pekerjaan</label>
                                     <input type="text" class="form-control" id="pekerjaan" name="pekerjaan"
-                                        value="{{ old('pekerjaan') }}">
+                                        value="{{ old('pekerjaan', $peserta->pekerjaan ?? '') }}">
                                     @error('pekerjaan')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="latar_belakang" class="form-label">Latar Belakang</label>
-                                    <textarea class="form-control" id="latar_belakang" name="latar_belakang" rows="3">{{ old('latar_belakang') }}</textarea>
+                                    <textarea class="form-control" id="latar_belakang" name="latar_belakang" rows="3">{{ old('latar_belakang', $peserta->latar_belakang ?? '') }}</textarea>
                                     @error('latar_belakang')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" id="isAnggota" name="isAnggota"
-                                        {{ old('isAnggota') ? 'checked' : '' }}>
+                                        {{ old('isAnggota', $peserta->isAnggota ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="isAnggota">Anggota Organisasi?</label>
                                 </div>
                             </div>
@@ -180,46 +179,52 @@
                             <!-- Tab Informasi Tambahan -->
                             <div class="tab-pane fade" id="additionalInfo" role="tabpanel"
                                 aria-labelledby="additionalInfo-tab">
-                                <div id="organisasiSection" style="display: none;">
+                                <div id="organisasiSection"
+                                    style="display: {{ old('isAnggota', $peserta->isAnggota ?? false) ? 'block' : 'none' }};">
                                     <div class="mb-3">
                                         <label for="name_organisasi" class="form-label">Nama Organisasi</label>
                                         <input type="text" class="form-control" id="name_organisasi"
-                                            name="name_organisasi" value="{{ old('name_organisasi') }}">
+                                            name="name_organisasi"
+                                            value="{{ old('name_organisasi', $peserta->name_organisasi ?? '') }}">
                                         @error('name_organisasi')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label for="desc_organisasi" class="form-label">Deskripsi Organisasi</label>
-                                        <textarea class="form-control" id="desc_organisasi" name="desc_organisasi" rows="3">{{ old('desc_organisasi') }}</textarea>
+                                        <textarea class="form-control" id="desc_organisasi" name="desc_organisasi" rows="3">{{ old('desc_organisasi', $peserta->desc_organisasi ?? '') }}</textarea>
                                         @error('desc_organisasi')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="peran_organisasi" class="form-label">Peran dalam Organisasi</label>
-                                        <input type="text" class="form-control" id="peran_organisasi"
-                                            name="peran_organisasi" value="{{ old('peran_organisasi') }}">
+                                        <label for="desc_organisasi" class="form-label">Peran Organisasai</label>
+                                        <textarea class="form-control" id="peran_organisasi" name="peran_organisasi" rows="3">{{ old('desc_organisasi', $peserta->desc_organisasi ?? '') }}</textarea>
                                         @error('peran_organisasi')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="desc_essai" class="form-label">Deskripsi Essai</label>
-                                    <textarea class="form-control" id="desc_essai" name="desc_essai" rows="3">{{ old('desc_essai') }}</textarea>
+                                    <label for="essay" class="form-label">Essay</label>
+                                    <textarea class="form-control" id="essay" name="desc_essai" rows="3">{{ old('desc_essai', $peserta->desc_essai ?? '') }}</textarea>
                                     @error('desc_essai')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="isPertukaran"
-                                        name="isPertukaran" {{ old('isPertukaran') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="isPertukaran">Pertukaran Program?</label>
+                                    <input type="checkbox" class="form-check-input" id="exchange_program"
+                                        name="isPertukaran"
+                                        {{ old('isPertukaran', $peserta->isPertukaran ?? false) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="exchange_program">Program Pertukaran </label>
+                                    @error('isPertukaran')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="motivasi_essai" class="form-label">Motivasi Essai</label>
-                                    <textarea class="form-control" id="motivasi_essai" name="motivasi_essai" rows="3">{{ old('motivasi_essai') }}</textarea>
+                                    <label for="motivasi" class="form-label">Motivasi</label>
+                                    <textarea class="form-control" id="motivasi" name="motivasi_essai" rows="3">{{ old('motivasi_essai', $peserta->motivasi_essai ?? '') }}</textarea>
                                     @error('motivasi_essai')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -295,15 +300,19 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Nama Peserta
-                            <span class="badge bg-primary rounded-pill">Peserta</span>
+                            <span class="badge bg-primary rounded-pill">{{ Auth::user()->name }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Email
-                            <span class="badge bg-primary rounded-pill">peserta@example.com</span>
+                            <span class="badge bg-primary rounded-pill">{{ Auth::user()->email }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Status
-                            <span class="badge bg-success rounded-pill">Peserta Baru</span>
+                            <span class="badge bg-success rounded-pill">{{ $peserta->status }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Progess Berkas
+                            <span class="badge bg-success rounded-pill">{{ $status }}</span>
                         </li>
                     </ul>
                 </div>

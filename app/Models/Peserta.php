@@ -37,7 +37,9 @@ class Peserta extends Model
     'status_berkas',
     'provinsi_id',
     'kabupaten_id',
+    'status_kabupaten',
     'foto',
+    'msg',
   ];
 
   protected $casts = [
@@ -48,5 +50,30 @@ class Peserta extends Model
   public function user()
   {
     return $this->belongsTo(User::class);
+  }
+
+  public function kabupaten()
+  {
+    return $this->belongsTo(Regency::class, 'kabupaten_id');
+  }
+
+  public function penilaian()
+  {
+    return $this->hasOne(Penilaian::class)->where('isKabupaten', true);
+  }
+
+  public function penilainProvinsi()
+  {
+    return $this->hasMany(Penilaian::class)->where('isKabupaten', false);
+  }
+
+  public function provinsi()
+  {
+    return $this->belongsTo(Province::class, 'provinsi_id');
+  }
+
+  public function pendaftaran()
+  {
+    return $this->belongsTo(Pendaftaran::class);
   }
 }

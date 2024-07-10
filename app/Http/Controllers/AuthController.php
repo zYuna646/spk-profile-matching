@@ -18,7 +18,8 @@ class AuthController extends Controller
 
   public function register()
   {
-    return view('content.authentications.auth-register-basic');
+    $periode = Pendaftaran::all();
+    return view('content.authentications.auth-register-basic', compact('periode'));
   }
 
   public function forgot()
@@ -34,6 +35,7 @@ class AuthController extends Controller
       'gender' => 'required|in:L,P', // Menentukan jenis kelamin hanya boleh 'L' atau 'P'
       'birthdate' => 'required|date',
       'password' => 'required|string|min:8|confirmed',
+      'periode' => 'required',
     ]);
 
     // Create the user
@@ -46,7 +48,7 @@ class AuthController extends Controller
     ]);
 
     // Create the associated Peserta record
-    $pendaftaran = Pendaftaran::find($request->pendaftaran_id);
+    $pendaftaran = Pendaftaran::find($request->periode);
     Peserta::create([
       'user_id' => $user->id,
       'jk' => $request->gender, // Menyimpan jenis kelamin dari input form

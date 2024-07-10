@@ -55,7 +55,7 @@ use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 // Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+Route::get('/', [AuthController::class, 'login'])->name('dashboard-analytics');
 
 // layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
@@ -178,11 +178,33 @@ Route::prefix('pendaftaran')
   ->name('pendaftaran.')
   ->group(function () {
     Route::get('berkas/filter', [PesertaController::class, 'filter'])->name('berkas.filter');
-    Route::post('berkas/terima', [VerificatorController::class, 'accept'])->name('berkas.terima');
-    Route::post('berkas/tolak', [VerificatorController::class, 'reject'])->name('berkas.tolak');
 
     Route::resource('berkas', BerkasController::class);
   });
 
+Route::post('berkas/terima/{id}', [VerificatorController::class, 'accept'])->name('berkas.terima');
+Route::post('berkas/tolak/{id}', [VerificatorController::class, 'reject'])->name('berkas.tolak');
+
 Route::resource('alumni', AlumniController::class);
 Route::post('peserta/berkas/update', [PesertaController::class, 'updateBerkas'])->name('peserta.berkas.update');
+Route::get('penilaian/kabupaten', [BerkasController::class, 'penilaian_kabupaten'])->name('penilaian.kabupaten');
+Route::get('penilaian/provinsi', [BerkasController::class, 'penilaian_provinsi'])->name('penilaian.provinsi');
+Route::get('rangking/provinsi', [BerkasController::class, 'rangking_provinsi'])->name('rangking.provinsi');
+Route::get('rangking/kabupaten', [BerkasController::class, 'rangking_kabupaten'])->name('rangking.kabupaten');
+Route::post('update/kriteria', [PenilaiController::class, 'update_kriteria'])->name('update.kriteria');
+Route::post('penilain/kabupaten/{id}', [PenilaiController::class, 'penilaian_kabupaten'])->name(
+  'penilaian.update.kabupaten'
+);
+Route::post('penilain/provinsi/{id}', [PenilaiController::class, 'penilaian_provinsi'])->name(
+  'penilaian.update.provinsi'
+);
+Route::post('kabupaten/terima/{id}', [PenilaiController::class, 'kabupaten_terima'])->name('kabupaten.terima');
+Route::post('provinsi/terima/{id}', [PenilaiController::class, 'provinsi_terima'])->name('provinsi.terima');
+
+Route::post('kabupaten/tolak/{id}', [PenilaiController::class, 'kabupaten_tolak'])->name('kabupaten.tolak');
+Route::post('provinsi/tolak/{id}', [PenilaiController::class, 'provinsi_tolak'])->name('provinsi.tolak');
+Route::get('kabupaten/status/{kab_id}/{periode}', [PenilaiController::class, 'kab_status'])->name('kabupaten.status');
+Route::get('kabupaten/rangking/{kab_id}/{periode}', [PenilaiController::class, 'kab_rank'])->name('kabupaten.rangking');
+
+Route::get('provinsi/status/{prov_id}/{periode}', [PenilaiController::class, 'prov_status'])->name('provinsi.status');
+Route::get('provinsi/rangking/{prov_id}/{periode}', [PenilaiController::class, 'prov_rank'])->name('provinsi.rangking');

@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kriteria;
 use App\Models\Province;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
   public function index()
   {
-    return view('content.dashboard.dashboards-analytics');
+    $data = [
+      'peserta' => User::where('role_id', Role::where('name', 'peserta')->first()->id)->count(),
+      'penilai' => User::where('role_id', Role::where('name', 'penilai')->first()->id)->count(),
+      'verificator' => User::where('role_id', Role::where('name', 'verificator')->first()->id)->count(),
+      'pimpinan' => User::where('role_id', Role::where('name', 'pimpinan')->first()->id)->count(),
+      'kriteria' => Kriteria::all(),
+    ];
+
+    return view('content.dashboard.dashboards-analytics', compact('data'));
   }
 
   public function peserta()

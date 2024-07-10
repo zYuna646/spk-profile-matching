@@ -102,17 +102,20 @@ class VerificatorController extends Controller
 
   public function accept($id)
   {
-    $peserta = Peserta::find($id);
+    $peserta = User::find($id)->peserta;
     $peserta->status_berkas = 'terima';
+    $peserta->save();
     return redirect()
       ->route('pendaftaran.periode.index')
       ->with('success', 'Berhasil Ditambahkan');
   }
 
-  public function reject($id)
+  public function reject(Request $request, $id)
   {
-    $peserta = Peserta::find($id);
+    $peserta = User::find($id)->peserta;
     $peserta->status_berkas = 'tolak';
+    $peserta->msg = $request->msg;
+    $peserta->save();
     return redirect()
       ->route('pendaftaran.periode.index')
       ->with('success', 'Berhasil Ditambahkan');

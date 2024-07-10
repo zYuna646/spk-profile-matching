@@ -195,6 +195,7 @@ class PesertaController extends Controller
     $peserta->motivasi_essai = $request->motivasi_essai;
 
     $peserta->status_berkas = 'proses';
+    $peserta->status = 'mengajukan-berkas';
 
     // Handle file uploads
     if ($request->hasFile('file_ktp')) {

@@ -25,7 +25,7 @@
             @endif
 
             <!-- Filter Form -->
-            <form action="{{ route('pendaftaran.berkas.filter') }}" method="GET" class="mb-3">
+            <form action="{{ route('pendaftaran.berkas.index') }}" method="GET" class="mb-3">
                 <div class="row g-3 align-items-center">
                     <div class="col-auto">
                         <label for="periode" class="col-form-label">Berdasarkan Periode:</label>
@@ -44,9 +44,9 @@
                     <div class="col-auto">
                         <select name="status" id="status" class="form-select">
                             <option value="">Pilih Status</option>
-                            <option value="terima">proses</option>
-                            <option value="tolak">terima</option>
-                            <option value="pending">tolak</option>
+                            <option value="proses">Proses</option>
+                            <option value="terima">Terima</option>
+                            <option value="tolak">Tolak</option>
                         </select>
                     </div>
                     <div class="col-auto">
@@ -54,6 +54,7 @@
                     </div>
                 </div>
             </form>
+
 
             <table id="table_config" class="display" style="width:100%; height: 100%;">
                 <thead>
@@ -67,67 +68,63 @@
                 </thead>
                 <tbody>
                     @foreach ($data as $item)
-                        @if (isset($selectedPeriode) && $item->peserta->periode_id == $selectedPeriode)
-                            <tr>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->email }}</td>
-                                <td>{{ $item->peserta->periode->name }}</td>
-                                <td>{{ $item->peserta->status_berkas }}</td>
-                                <td>
-                                    <!-- Edit button -->
-                                    <button onclick="window.location.href='{{ route('pendaftaran.periode.edit', $item) }}'"
-                                        type="button" class="btn btn-icon btn-outline-warning" title="Edit">
-                                        <span class="tf-icons bx bx-edit"></span>
+                        <tr>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->peserta->pendaftaran->name }}</td>
+                            <td>{{ $item->peserta->status_berkas }}</td>
+                            <td>
+                                <!-- Edit button -->
+                                <button onclick="window.location.href='{{ route('pendaftaran.berkas.show', $item->id) }}'"
+                                    type="button" class="btn btn-icon btn-outline-warning" title="Lihat">
+                                    <span class="tf-icons bx bx-show"></span>
+                                </button>
+
+                                <!-- Accept button -->
+                                <form action="{{ route('berkas.terima', $item) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-icon btn-outline-success" title="Accept">
+                                        <span class="tf-icons bx bx-check"></span>
                                     </button>
+                                </form>
 
-                                    <!-- Accept button -->
-                                    <form action="{{ route('berkas.terima', $item) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-icon btn-outline-success" title="Accept">
-                                            <span class="tf-icons bx bx-check"></span>
-                                        </button>
-                                    </form>
+                                <!-- Reject button -->
+                                <button type="button" class="btn btn-icon btn-outline-danger" title="Reject"
+                                    data-bs-toggle="modal" data-bs-target="#rejectModal{{ $item->id }}">
+                                    <span class="tf-icons bx bx-x"></span>
+                                </button>
 
-                                    <!-- Reject button -->
-                                    <button type="button" class="btn btn-icon btn-outline-danger" title="Reject"
-                                        data-bs-toggle="modal" data-bs-target="#rejectModal{{ $item->id }}">
-                                        <span class="tf-icons bx bx-x"></span>
-                                    </button>
-
-                                    <!-- Modal for rejection -->
-                                    <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
-                                        aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="rejectModalLabel{{ $item->id }}">Alasan
-                                                        Penolakan</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <form action="{{ route('berkas.tolak', $item) }}" method="POST">
-                                                    @csrf
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label for="rejectionReason"
-                                                                class="col-form-label">Alasan:</label>
-                                                            <textarea class="form-control" id="rejectionReason" name="rejection_reason" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Tutup</button>
-                                                        <button type="submit" class="btn btn-danger">Tolak</button>
-                                                    </div>
-                                                </form>
+                                <!-- Modal for rejection -->
+                                <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1"
+                                    aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="rejectModalLabel{{ $item->id }}">Alasan
+                                                    Penolakan</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
+                                            <form action="{{ route('berkas.tolak', $item) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="rejectionReason" class="col-form-label">Alasan:</label>
+                                                        <textarea class="form-control" id="rejectionReason" name="msg" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Tutup</button>
+                                                    <button type="submit" class="btn btn-danger">Tolak</button>
+                                                </div>
+                                            </form>
+
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        @endif
+                                </div>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -144,6 +141,76 @@
     <script>
         $(document).ready(function() {
             $('#table_config').DataTable();
+        });
+    </script>
+    <script>
+        var tabTriggerList = document.querySelectorAll('#profileTabs button')
+        tabTriggerList.forEach(function(tabTrigger) {
+            var tabPaneId = tabTrigger.getAttribute('data-bs-target');
+            tabTrigger.addEventListener('click', function(event) {
+                event.preventDefault();
+                var tabPane = document.querySelector(tabPaneId);
+                var tabContent = tabPane.closest('.tab-content');
+                var activeTabs = tabContent.querySelectorAll('.tab-pane.active');
+                activeTabs.forEach(function(tab) {
+                    tab.classList.remove('active');
+                });
+                tabPane.classList.add('active');
+            });
+        });
+
+        // Toggle visibility of organisasiSection based on isAnggota checkbox
+        var isAnggotaCheckbox = document.getElementById('isAnggota');
+        var organisasiSection = document.getElementById('organisasiSection');
+
+        isAnggotaCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                organisasiSection.style.display = 'block';
+            } else {
+                organisasiSection.style.display = 'none';
+            }
+        });
+
+        // Initialize visibility based on initial checkbox state
+        if (isAnggotaCheckbox.checked) {
+            organisasiSection.style.display = 'block';
+        } else {
+            organisasiSection.style.display = 'none';
+        }
+
+        // Fetch Kabupaten based on Provinsi
+        document.getElementById('provinsi').addEventListener('change', function() {
+            var provinsiId = this.value;
+            var kabupatenSelect = document.getElementById('kabupaten');
+
+            if (provinsiId) {
+                fetch('/get-kabupaten/' + provinsiId)
+                    .then(response => response.json())
+                    .then(data => {
+                        kabupatenSelect.innerHTML = '<option value="">Pilih Kabupaten</option>';
+                        data.forEach(function(kabupaten) {
+                            var option = document.createElement('option');
+                            option.value = kabupaten.id;
+                            option.text = kabupaten.name;
+                            kabupatenSelect.appendChild(option);
+                        });
+                        kabupatenSelect.disabled = false;
+                    });
+            } else {
+                kabupatenSelect.innerHTML = '<option value="">Pilih Kabupaten</option>';
+                kabupatenSelect.disabled = true;
+            }
+        });
+
+        // Preview selected photo
+        document.getElementById('foto').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('fotoPreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
         });
     </script>
 @endsection

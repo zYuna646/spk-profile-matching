@@ -10,26 +10,43 @@
       "name": "Akun",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "layouts",
+      "role": [
+        "Admin",
+        "verficator"
+      ],
       "submenu": [
         {
           "url": "administrator/users",
           "name": "Administrator / Verificator",
-          "slug": "administrator-verificator"
+          "slug": "administrator-verificator",
+          "role": [
+            "admin"
+          ]
         },
         {
           "url": "penilai/users",
           "name": "penilai",
-          "slug": "penilai"
+          "slug": "penilai",
+          "role": [
+            "admin"
+          ]
         },
         {
           "url": "pimpinan/users",
           "name": "pimpinan",
-          "slug": "pimpinan"
+          "slug": "pimpinan",
+          "role": [
+            "admin"
+          ]
         },
         {
           "url": "peserta/users",
           "name": "peserta",
-          "slug": "peserta"
+          "slug": "peserta",
+          "role": [
+            "admin",
+            "verficator"
+          ]
         }
       ]
     },
@@ -37,36 +54,78 @@
       "name": "Peserta",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "layouts",
+      "role": [
+        "Admin",
+        "verficator",
+        "penilai",
+        "pimpinan"
+      ],
       "submenu": [
         {
           "url": "peserta/users/status/peserta-baru",
           "name": "Peserta Baru",
-          "slug": "administrator-verificator"
+          "slug": "administrator-verificator",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         },
         {
           "url": "peserta/users/status/mengajukan-berkas",
           "name": "Mengajukan Berkas",
-          "slug": "penilai"
+          "slug": "penilai",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         },
         {
           "url": "peserta/users/status/lolos-seleksi-provinsi",
           "name": "Lolos Seleksi Provinsi",
-          "slug": "pimpinan"
+          "slug": "pimpinan",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         },
         {
           "url": "peserta/users/status/gugur-seleksi-umum",
           "name": "Gugur Seleksi Umum",
-          "slug": "peserta"
+          "slug": "peserta",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         },
         {
           "url": "peserta/users/status/gugur-seleksi-kabupaten",
           "name": "Gugur Seleksi Kabupaten",
-          "slug": "peserta"
+          "slug": "peserta",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         },
         {
           "url": "peserta/users/status/gugur-seleksi-provinsi",
           "name": "Gugur Seleksi Provinsi",
-          "slug": "peserta"
+          "slug": "peserta",
+          "role": [
+            "Admin",
+            "verficator",
+            "penilai",
+            "pimpinan"
+          ]
         }
       ]
     },
@@ -74,16 +133,28 @@
       "name": "Pendaftaran",
       "icon": "menu-icon tf-icons bx bx-layout",
       "slug": "layouts",
+      "role": [
+        "Admin",
+        "verficator"
+      ],
       "submenu": [
         {
           "url": "pendaftaran/periode",
           "name": "Periode",
-          "slug": "administrator-verificator"
+          "slug": "administrator-verificator",
+          "role": [
+            "admin",
+            "verficator"
+          ]
         },
         {
           "url": "pendaftaran/berkas",
           "name": "Berkas Pendaftaran",
-          "slug": "penilai"
+          "slug": "penilai",
+          "role": [
+            "admin",
+            "verficator"
+          ]
         }
       ]
     },
@@ -91,21 +162,49 @@
       "name": "Penilaian",
       "icon": "menu-icon tf-icons bx bx-layout",
       "slug": "layouts",
+      "role": [
+        "Admin",
+        "penilai",
+        "pimpinan"
+      ],
       "submenu": [
         {
-          "url": "layouts/without-menu",
+          "url": "penilaian/kabupaten",
           "name": "Penilaian Kabupaten",
-          "slug": "administrator-verificator"
+          "slug": "administrator-verificator",
+          "role": [
+            "Admin",
+            "penilai"
+          ]
         },
         {
-          "url": "layouts/without-menu",
+          "url": "penilaian/provinsi",
           "name": "Penilaian Provinsi",
-          "slug": "administrator-verificator"
+          "slug": "administrator-verificator",
+          "role": [
+            "Admin",
+            "penilai"
+          ]
         },
         {
-          "url": "layouts/without-navbar",
-          "name": "Rangking",
-          "slug": "penilai"
+          "url": "rangking/kabupaten",
+          "name": "Rangking Kabupaten",
+          "slug": "penilai",
+          "role": [
+            "Admin",
+            "penilai",
+            "pimpinan"
+          ]
+        },
+        {
+          "url": "rangking/provinsi",
+          "name": "Rangking Provinsi",
+          "slug": "penilai",
+          "role": [
+            "Admin",
+            "penilai",
+            "pimpinan"
+          ]
         }
       ]
     },
@@ -113,7 +212,13 @@
       "name": "Alumni",
       "icon": "menu-icon tf-icons bx bx-layout",
       "slug": "layouts",
-      "url": "alumni"
+      "url": "alumni",
+      "role": [
+        "admin",
+        "verficator",
+        "penilai",
+        "pimpinan"
+      ]
     }
   ]
 }

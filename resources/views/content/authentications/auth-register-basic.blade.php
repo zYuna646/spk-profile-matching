@@ -27,6 +27,21 @@
                         <form id="formAuthentication" class="mb-3" action="{{ route('register.submit') }}" method="POST">
                             @csrf
                             <div class="mb-3">
+                                <label for="username" class="form-label">Periode Pendaftaran</label>
+                                <select class="form-control @error('periode') is-invalid @enderror" id="username"
+                                    name="periode" required>
+                                    <option value="" disabled selected>pilih periode</option>
+                                    @foreach ($periode as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}-{{ $item->periode }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('periode')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="username" class="form-label">Nama Lengkap</label>
                                 <input type="text" class="form-control @error('username') is-invalid @enderror"
                                     id="username" name="name" placeholder="Enter your username" autofocus required

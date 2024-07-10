@@ -45,6 +45,7 @@ return new class extends Migration {
       $table->enum('status_berkas', ['belum', 'proses', 'tolak', 'terima'])->default('belum');
       $table->string('kabupaten_id')->nullable();
       $table->string('provinsi_id')->nullable();
+      $table->string('msg')->nullable();
       $table
         ->foreign('kabupaten_id')
         ->references('id')
