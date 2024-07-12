@@ -165,7 +165,6 @@ class PesertaController extends Controller
       'file_score_report' => 'nullable|file|mimes:pdf,jpeg,png|max:2048',
       'file_penghargaan.*' => 'nullable|file|mimes:pdf,jpeg,png|max:2048',
     ]);
-
     $user = Auth::user();
     $peserta = $user->peserta;
 

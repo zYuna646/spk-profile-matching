@@ -102,6 +102,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
+
                                             <form action="{{ route('penilaian.update.kabupaten', $item->id) }}"
                                                 method="POST">
                                                 @csrf
@@ -111,6 +112,15 @@
                                                             <label for="nilai_{{ $criterion->id }}"
                                                                 class="col-form-label">{{ $criterion->name }}</label>
                                                             @foreach ($criterion->subKriteria as $subKriteria)
+                                                                @php
+                                                                    try {
+                                                                        $tmp = $item->penilaian->nilai
+                                                                            ->where('sub_kriteria_id', $subKriteria->id)
+                                                                            ->first()->nilai;
+                                                                    } catch (\Throwable $th) {
+                                                                        $tmp = '';
+                                                                    }
+                                                                @endphp
                                                                 <div class="mb-2">
                                                                     <label for="subnilai_{{ $subKriteria->id }}"
                                                                         class="col-form-label">{{ $subKriteria->name }}</label>
@@ -118,7 +128,7 @@
                                                                         id="subnilai_{{ $subKriteria->id }}"
                                                                         name="subnilai[{{ $criterion->id }}][{{ $subKriteria->id }}]"
                                                                         min="1" max="5" required
-                                                                        value="{{ $item->penilaian->nilai->where('sub_kriteria_id', $subKriteria->id)->first()->nilai ?? '' }}">
+                                                                        value="{{ $tmp }}">
                                                                 </div>
                                                             @endforeach
                                                         </div>
