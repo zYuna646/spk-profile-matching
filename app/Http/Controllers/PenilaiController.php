@@ -139,11 +139,13 @@ class PenilaiController extends Controller
 
     if ($isKabupaten) {
       $penilaian = $isKabupaten;
-      foreach ($request->subnilai as $sub_kriteria_id => $nilai) {
-        $nilaiModel = $penilaian->nilai->where('sub_kriteria_id', $sub_kriteria_id)->first();
-        if ($nilaiModel) {
-          $nilaiModel->nilai = $nilai;
-          $nilaiModel->save();
+      foreach ($request->subnilai as $kirteria => $nilai) {
+        foreach ($request->subnilai[$kirteria] as $sub => $value) {
+          $nilaiModel = $penilaian->nilai->where('sub_kriteria_id', $sub)->first();
+          if ($nilaiModel) {
+            $nilaiModel->nilai = $nilai;
+            $nilaiModel->save();
+          }
         }
       }
     } else {
@@ -151,12 +153,14 @@ class PenilaiController extends Controller
         'peserta_id' => $peserta->id,
         'isKabupaten' => true,
       ]);
-      foreach ($request->subnilai as $sub_kriteria_id => $nilai) {
-        Nilai::create([
-          'penilaian_id' => $penilaian->id,
-          'sub_kriteria_id' => $sub_kriteria_id,
-          'nilai' => $nilai,
-        ]);
+      foreach ($request->subnilai as $kirteria => $item) {
+        foreach ($request->subnilai[$kirteria] as $sub => $value) {
+          nilai::create([
+            'penilaian_id' => $penilaian->id,
+            'sub_kriteria_id' => $sub,
+            'nilai' => $value,
+          ]);
+        }
       }
     }
 
@@ -180,11 +184,13 @@ class PenilaiController extends Controller
 
     if ($isKabupaten) {
       $penilaian = $isKabupaten;
-      foreach ($request->subnilai as $sub_kriteria_id => $nilai) {
-        $nilaiModel = $penilaian->nilai->where('sub_kriteria_id', $sub_kriteria_id)->first();
-        if ($nilaiModel) {
-          $nilaiModel->nilai = $nilai;
-          $nilaiModel->save();
+      foreach ($request->subnilai as $kirteria => $nilai) {
+        foreach ($request->subnilai[$kirteria] as $sub => $value) {
+          $nilaiModel = $penilaian->nilai->where('sub_kriteria_id', $sub)->first();
+          if ($nilaiModel) {
+            $nilaiModel->nilai = $nilai;
+            $nilaiModel->save();
+          }
         }
       }
     } else {
@@ -192,12 +198,12 @@ class PenilaiController extends Controller
         'peserta_id' => $peserta->id,
         'isKabupaten' => false,
       ]);
-      foreach ($request->subnilai as $key => $value) {
-        foreach ($value as $key => $item) {
+      foreach ($request->subnilai as $kirteria => $item) {
+        foreach ($request->subnilai[$kirteria] as $sub => $value) {
           nilai::create([
             'penilaian_id' => $penilain->id,
-            'sub_kriteria_id' => $key,
-            'nilai' => $item,
+            'sub_kriteria_id' => $sub,
+            'nilai' => $value,
           ]);
         }
       }

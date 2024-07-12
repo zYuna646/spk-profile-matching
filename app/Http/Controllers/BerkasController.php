@@ -134,7 +134,11 @@ class BerkasController extends Controller
     $prov = Province::find($request->provinsi);
     // Filter peserta yang memiliki tepat 3 penilaian
     $data = $data->filter(function ($peserta) {
-      return $peserta->penilaian->count() === 2;
+      if ($peserta->penilaian) {
+        if ($peserta->penilaian->count() == 2) {
+          return $peserta;
+        }
+      }
     });
 
     $rangking = [];
@@ -235,7 +239,11 @@ class BerkasController extends Controller
     $per = Pendaftaran::find($request->periode);
     // Filter peserta yang memiliki tepat 3 penilaian
     $data = $data->filter(function ($peserta) {
-      return $peserta->penilaian->count() >= 1;
+      if ($peserta->penilaian) {
+        if ($peserta->penilaian->count() >= 1) {
+          return $peserta;
+        }
+      }
     });
 
     $rangking = [];
