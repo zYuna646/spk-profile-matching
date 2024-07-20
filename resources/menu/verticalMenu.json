@@ -13,6 +13,32 @@
       ]
     },
     {
+      "name": "Master",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "layouts",
+      "role": [
+        "Admin"
+      ],
+      "submenu": [
+        {
+          "url": "kriteria/kriteria",
+          "name": "Kriteria",
+          "slug": "administrator-verificator",
+          "role": [
+            "Admin"
+          ]
+        },
+        {
+          "url": "kriteria/sub",
+          "name": "Sub Kriteria",
+          "slug": "penilai",
+          "role": [
+            "Admin"
+          ]
+        }
+      ]
+    },
+    {
       "name": "Akun",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "layouts",
@@ -149,7 +175,7 @@
           "name": "Periode",
           "slug": "administrator-verificator",
           "role": [
-            "admin",
+            "Admin",
             "verificator"
           ]
         },
@@ -158,7 +184,7 @@
           "name": "Berkas Pendaftaran",
           "slug": "penilai",
           "role": [
-            "admin",
+            "Admin",
             "verificator"
           ]
         }
@@ -220,7 +246,7 @@
       "slug": "layouts",
       "url": "alumni",
       "role": [
-        "admin",
+        "Admin",
         "verficator",
         "penilai",
         "pimpinan"

@@ -114,6 +114,7 @@ class VerificatorController extends Controller
   {
     $peserta = User::find($id)->peserta;
     $peserta->status_berkas = 'tolak';
+    $peserta->status = 'gugur-seleksi-umum';
     $peserta->msg = $request->msg;
     $peserta->save();
     return redirect()

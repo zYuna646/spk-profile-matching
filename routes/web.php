@@ -5,11 +5,14 @@ use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\PenilaiController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PesertaController;
+use App\Http\Controllers\SubController;
 use App\Http\Controllers\VerificatorController;
 use App\Http\Controllers\WilayahController;
+use App\Models\Kriteria;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -173,6 +176,12 @@ Route::prefix('pendaftaran')
   ->group(function () {
     Route::resource('periode', PeriodeController::class);
   });
+
+Route::prefix('kriteria')->name('kriteria.')->group(function () {
+  Route::resource('kriteria', KriteriaController::class);
+  Route::resource('sub', SubController::class);
+
+});
 
 Route::prefix('pendaftaran')
   ->name('pendaftaran.')

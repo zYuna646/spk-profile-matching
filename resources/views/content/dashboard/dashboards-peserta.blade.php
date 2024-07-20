@@ -22,7 +22,7 @@
                 $peserta = $user->peserta;
             @endphp
 
-            @if ($status === 'tolak')
+            {{-- @if ($status === 'tolak')
                 <!-- Komentar Jika Ditolak -->
                 <div class="card mt-4">
                     <div class="card-body">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <!--/ Komentar Jika Ditolak -->
-            @endif
+            @endif --}}
 
 
 
