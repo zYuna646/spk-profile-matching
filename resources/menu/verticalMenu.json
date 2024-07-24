@@ -116,6 +116,28 @@
           ]
         },
         {
+          "url": "peserta/users/status/lolos-seleksi-umum",
+          "name": "Lolos Seleksi Umum",
+          "slug": "pimpinan",
+          "role": [
+            "Admin",
+            "verificator",
+            "penilai",
+            "pimpinan"
+          ]
+        },
+        {
+          "url": "peserta/users/status/lolos-seleksi-kabupaten",
+          "name": "Lolos Seleksi Kabupaten",
+          "slug": "pimpinan",
+          "role": [
+            "Admin",
+            "verificator",
+            "penilai",
+            "pimpinan"
+          ]
+        },
+        {
           "url": "peserta/users/status/lolos-seleksi-provinsi",
           "name": "Lolos Seleksi Provinsi",
           "slug": "pimpinan",
@@ -126,6 +148,7 @@
             "pimpinan"
           ]
         },
+       
         {
           "url": "peserta/users/status/gugur-seleksi-umum",
           "name": "Gugur Seleksi Umum",
@@ -246,10 +269,7 @@
       "slug": "layouts",
       "url": "alumni",
       "role": [
-        "Admin",
-        "verficator",
-        "penilai",
-        "pimpinan"
+        "Admin"
       ]
     }
   ]

@@ -24,24 +24,21 @@ return new class extends Migration {
       $table->string('jk');
       $table->date('tgl_lahir');
       $table->string('agama')->nullable();
-      $table->string('asal')->nullable();
       $table->string('no_tlp')->nullable();
       $table->string('sosial_media')->nullable();
       $table->string('pekerjaan')->nullable();
       $table->text('latar_belakang')->nullable();
-      $table->boolean('isAnggota')->default(false);
-      $table->string('name_organisasi')->nullable();
-      $table->text('desc_organisasi')->nullable();
-      $table->string('peran_organisasi')->nullable();
-      $table->text('desc_essai')->nullable();
+      $table->text('periode_mengikuti')->nullable();
+      $table->text('peran_organisasi')->nullable();
       $table->boolean('isPertukaran')->default(false);
-      $table->text('motivasi_essai')->nullable();
+      $table->text('motivasi')->nullable();
       $table->string('file_ktp')->nullable();
       $table->string('file_cv')->nullable();
       $table->string('file_ijazah')->nullable();
       $table->json('file_kegiatan_sosial')->nullable();
       $table->string('file_score_report')->nullable();
       $table->json('file_penghargaan')->nullable();
+      $table->string('file_surat_rekomendasi')->nullable();
       $table->enum('status_berkas', ['belum', 'proses', 'tolak', 'terima'])->default('belum');
       $table->string('kabupaten_id')->nullable();
       $table->string('provinsi_id')->nullable();
@@ -62,6 +59,8 @@ return new class extends Migration {
           'peserta-baru',
           'mengajukan-berkas',
           'lolos-seleksi-provinsi',
+          'lolos-seleksi-umum',
+          'lolos-seleksi-kabupaten',
           'gugur-seleksi-umum',
           'gugur-seleksi-kabupaten',
           'gugur-seleksi-provinsi',

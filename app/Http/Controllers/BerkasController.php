@@ -56,7 +56,7 @@ class BerkasController extends Controller
 
     // Get peserta where status_berkas is 'terima' and status is 'mengajukan-berkas'
     $data = Peserta::where('status_berkas', 'terima')
-      ->where('status', 'mengajukan-berkas')
+      ->where('status', '!=' , 'peserta-baru')->orWhere('status', '!=', 'mengajukan-berkas')
       ->when($request->filled('kabupaten'), function ($query) use ($request) {
         $query->where('kabupaten_id', $request->kabupaten);
       })
@@ -75,15 +75,18 @@ class BerkasController extends Controller
   {
     // Your logic for penilaian provinsi
     $kabupaten = Regency::all();
-    $data = Peserta::where('status_kabupaten', true)
-      ->where('status', 'mengajukan-berkas')
+    $data = Peserta::where(function ($query) {
+      $query->where('status', 'lolos-seleksi-kabupaten')
+        ->orWhere('status', 'lolos-seleksi-provinsi');
+    })
       ->when($request->filled('provinsi'), function ($query) use ($request) {
-        $query->where('provinsi_id', $request->kabupaten);
+        return $query->where('provinsi_id', $request->provinsi); // Corrected from kabupaten to provinsi
       })
       ->when($request->filled('periode'), function ($query) use ($request) {
-        $query->where('pendaftaran_id', $request->periode);
+        return $query->where('pendaftaran_id', $request->periode);
       })
       ->get();
+
     $periodes = Pendaftaran::all();
     $provinsi = Province::all();
     $kriteria = Kriteria::all();
@@ -122,14 +125,18 @@ class BerkasController extends Controller
       5 => 0.9,
     ];
     // Get peserta where status_berkas is 'terima' and status is not 'peserta-baru'
-    $data = Peserta::where('status_kabupaten', true)
+    $data = Peserta::where(function ($query) {
+      $query->where('status', 'lolos-seleksi-kabupaten')
+        ->orWhere('status', 'lolos-seleksi-provinsi');
+    })
       ->when($request->filled('provinsi'), function ($query) use ($request) {
-        $query->where('provinsi_id', $request->kabupaten);
+        return $query->where('provinsi_id', $request->provinsi);
       })
       ->when($request->filled('periode'), function ($query) use ($request) {
-        $query->where('pendaftaran_id', $request->periode);
+        return $query->where('pendaftaran_id', $request->periode);
       })
       ->get();
+
 
     $prov = Province::find($request->provinsi);
     // Filter peserta yang memiliki tepat 3 penilaian

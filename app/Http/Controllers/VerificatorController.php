@@ -104,6 +104,7 @@ class VerificatorController extends Controller
   {
     $peserta = User::find($id)->peserta;
     $peserta->status_berkas = 'terima';
+    $peserta->status = 'lolos-seleksi-umum';
     $peserta->save();
     return redirect()
       ->route('pendaftaran.periode.index')

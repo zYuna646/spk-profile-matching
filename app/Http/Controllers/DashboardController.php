@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kriteria;
 use App\Models\Province;
+use App\Models\Regency;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,5 +28,12 @@ class DashboardController extends Controller
   {
     $provinsi = Province::all();
     return view('content.dashboard.dashboards-peserta', compact('provinsi'));
+  }
+
+  public function upload()
+  {
+    $provinsi = Province::all();
+    $kabupaten = Regency::all();
+    return view('content.dashboard.upload', compact('provinsi', 'kabupaten'));
   }
 }

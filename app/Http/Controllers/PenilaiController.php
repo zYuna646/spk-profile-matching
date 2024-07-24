@@ -337,14 +337,18 @@ class PenilaiController extends Controller
   public function prov_rank($prov_id, $periode)
   {
     // Fetch Peserta data based on filters
-    $data = Peserta::where('status_kabupaten', true)
+    $data = Peserta::where(function ($query) {
+      $query->where('status', 'lolos-seleksi-kabupaten')
+        ->orWhere('status', 'lolos-seleksi-provinsi');
+    })
       ->when($prov_id != 'a', function ($query) use ($prov_id) {
-        $query->where('provinsi_id', $prov_id);
+        return $query->where('provinsi_id', $prov_id);
       })
       ->when($periode != 'a', function ($query) use ($periode) {
-        $query->where('pendaftaran_id', $periode);
+        return $query->where('pendaftaran_id', $periode);
       })
       ->get();
+
     $periode = Pendaftaran::find($periode);
     $kab = Regency::first();
 
@@ -437,14 +441,18 @@ class PenilaiController extends Controller
   public function prov_status($prov_id, $periode)
   {
     // Fetch Peserta data based on filters
-    $data = Peserta::where('status_kabupaten', true)
+    $data = Peserta::where(function ($query) {
+      $query->where('status', 'lolos-seleksi-kabupaten')
+        ->orWhere('status', 'lolos-seleksi-provinsi');
+    })
       ->when($prov_id != 'a', function ($query) use ($prov_id) {
-        $query->where('kabupaten_id', $prov_id);
+        return $query->where('kabupaten_id', $prov_id);
       })
       ->when($periode != 'a', function ($query) use ($periode) {
-        $query->where('pendaftaran_id', $periode);
+        return $query->where('pendaftaran_id', $periode);
       })
       ->get();
+
     $periode = Pendaftaran::find($periode);
     $kab = Regency::first();
 
@@ -459,7 +467,7 @@ class PenilaiController extends Controller
   public function kabupaten_terima($id)
   {
     $peserta = Peserta::find($id);
-    $peserta->status_kabupaten = true;
+    $peserta->status = 'lolos-seleksi-kabupaten';
     $peserta->save();
     return redirect()
       ->back()
