@@ -24,6 +24,7 @@
 
     <!-- Include Styles -->
     @include('layouts/sections/styles')
+    @yield('page-style')
 
     <!-- Include Scripts for customizer, helper, analytics, config -->
     @include('layouts/sections/scriptsIncludes')

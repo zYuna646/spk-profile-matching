@@ -7,314 +7,242 @@
 
 @section('title', 'Fluid - Layouts')
 
+@section('page-style')
+<style>
+    .spaced-container {
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-custom {
+        background-color: #ff5a5f;
+        border-color: #ff5a5f;
+        color: white;
+    }
+
+    .btn-custom:hover {
+        background-color: #ff4040;
+        border-color: #ff4040;
+    }
+</style>
+@endsection
+
 @section('content')
+ 
     <!-- Layout Demo -->
     <div class="">
+        @php
+            use Illuminate\Support\Facades\Storage;
+            $status = $peserta->status_berkas;
+        @endphp
         <div class="card mb-4">
-            <h5 class="card-header">Lihat Data</h5>
-            <div class="card mt-4">
-                <div class="card-body">
+                <div class="container spaced-container">
                     <form action="{{ route('peserta.berkas.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <ul class="nav nav-tabs" id="profileTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="basicInfo-tab" data-bs-toggle="tab"
-                                    data-bs-target="#basicInfo" type="button" role="tab" aria-controls="basicInfo"
-                                    aria-selected="true">Informasi Dasar</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="additionalInfo-tab" data-bs-toggle="tab"
-                                    data-bs-target="#additionalInfo" type="button" role="tab"
-                                    aria-controls="additionalInfo" aria-selected="false">Informasi Tambahan</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents"
-                                    type="button" role="tab" aria-controls="documents"
-                                    aria-selected="false">Dokumen</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content mt-3" id="profileTabsContent">
-                            <!-- Tab Informasi Dasar -->
-                            <div class="tab-pane fade show active" id="basicInfo" role="tabpanel"
-                                aria-labelledby="basicInfo-tab">
-                                <div class="mb-3">
-                                    <label for="foto" class="form-label">Upload Foto</label>
-                                    <input type="file" class="form-control" id="foto" name="foto"
-                                        accept="image/*">
-                                    @if ($peserta && $peserta->foto)
-                                        <img id="fotoPreview" src="{{ asset('storage/fotos/' . $peserta->foto) }}"
-                                            alt="Foto Preview"
-                                            style="display: block; max-width: 200px; margin-top: 10px;" />
-                                    @else
-                                        <img id="fotoPreview" src="#" alt="Foto Preview"
-                                            style="display: none; max-width: 200px; margin-top: 10px;" />
-                                    @endif
-                                    @error('foto')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="agama" class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" id="agama" name="agama"
-                                        value="{{ old('agama', $peserta->agama ?? '') }}">
-                                    @error('agama')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="agama" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="agama" name="agama"
-                                        value="{{ old('agama', $peserta->agama ?? '') }}">
-                                    @error('agama')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="agama" class="form-label">Alamat</label>
-                                    <input type="text" class="form-control" id="agama" name="agama"
-                                        value="{{ old('agama', $peserta->agama ?? '') }}">
-                                    @error('agama')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="jk" class="form-label">Jenis Kelamin</label>
-                                    <select class="form-select" id="jk" name="jk">
-                                        <option value="L" {{ old('jk', $peserta->jk ?? '') == 'L' ? 'selected' : '' }}>
-                                            Laki-laki</option>
-                                        <option value="P"
-                                            {{ old('jk', $peserta->jk ?? '') == 'P' ? 'selected' : '' }}>
-                                            Perempuan</option>
-                                    </select>
-                                    @error('jk')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
-                                    <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir"
-                                        value="{{ old('tgl_lahir', $peserta->tgl_lahir ?? '') }}">
-                                    @error('tgl_lahir')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="agama" class="form-label">Agama</label>
-                                    <input type="text" class="form-control" id="agama" name="agama"
-                                        value="{{ old('agama', $peserta->agama ?? '') }}">
-                                    @error('agama')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="asal" class="form-label">Asal</label>
-                                    <input type="text" class="form-control" id="asal" name="asal"
-                                        value="{{ old('asal', $peserta->asal ?? '') }}">
-                                    @error('asal')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="provinsi" class="form-label">Provinsi</label>
-                                    <select class="form-select" id="provinsi" name="provinsi">
-                                        <option value="">Pilih Provinsi</option>
-                                        @foreach ($provinsi as $prov)
-                                            <option value="{{ $prov->id }}"
-                                                {{ old('provinsi', $peserta->provinsi_id ?? '') == $prov->id ? 'selected' : '' }}>
-                                                {{ $prov->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('provinsi')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="kabupaten" class="form-label">Kabupaten</label>
-                                    <select class="form-select" id="kabupaten" name="kabupaten" disabled>
-                                        <option value="">Pilih Kabupaten</option>
-                                    </select>
-                                    @error('kabupaten')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="no_tlp" class="form-label">Nomor Telepon</label>
-                                    <input type="text" class="form-control" id="no_tlp" name="no_tlp"
-                                        value="{{ old('no_tlp', $peserta->no_tlp ?? '') }}">
-                                    @error('no_tlp')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sosial_media" class="form-label">Akun Media Sosial</label>
-                                    <input type="text" class="form-control" id="sosial_media" name="sosial_media"
-                                        value="{{ old('sosial_media', $peserta->sosial_media ?? '') }}">
-                                    @error('sosial_media')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                                    <input type="text" class="form-control" id="pekerjaan" name="pekerjaan"
-                                        value="{{ old('pekerjaan', $peserta->pekerjaan ?? '') }}">
-                                    @error('pekerjaan')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="latar_belakang" class="form-label">Latar Belakang</label>
-                                    <textarea class="form-control" id="latar_belakang" name="latar_belakang" rows="3">{{ old('latar_belakang', $peserta->latar_belakang ?? '') }}</textarea>
-                                    @error('latar_belakang')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="isAnggota" name="isAnggota"
-                                        {{ old('isAnggota', $peserta->isAnggota ?? false) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="isAnggota">Anggota Organisasi?</label>
-                                </div>
-                            </div>
-
-                            <!-- Tab Informasi Tambahan -->
-                            <div class="tab-pane fade" id="additionalInfo" role="tabpanel"
-                                aria-labelledby="additionalInfo-tab">
-                                <div id="organisasiSection"
-                                    style="display: {{ old('isAnggota', $peserta->isAnggota ?? false) ? 'block' : 'none' }};">
-                                    <div class="mb-3">
-                                        <label for="name_organisasi" class="form-label">Nama Organisasi</label>
-                                        <input type="text" class="form-control" id="name_organisasi"
-                                            name="name_organisasi"
-                                            value="{{ old('name_organisasi', $peserta->name_organisasi ?? '') }}">
-                                        @error('name_organisasi')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="desc_organisasi" class="form-label">Deskripsi Organisasi</label>
-                                        <textarea class="form-control" id="desc_organisasi" name="desc_organisasi" rows="3">{{ old('desc_organisasi', $peserta->desc_organisasi ?? '') }}</textarea>
-                                        @error('desc_organisasi')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="desc_organisasi" class="form-label">Peran Organisasai</label>
-                                        <textarea class="form-control" id="peran_organisasi" name="peran_organisasi" rows="3">{{ old('desc_organisasi', $peserta->desc_organisasi ?? '') }}</textarea>
-                                        @error('peran_organisasi')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Informasi Dasar</h4>
+                                        <div class="form-group">
+                                            <label for="file_ijazah">Upload Foto*</label>
+                                            @if ($peserta->foto)
+                                                <a href="{{ Storage::url($peserta->foto) }}" target="_blank">Lihat Foto</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_ijazah" name="foto"
+                                                accept=".png" @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="jk">Jenis Kelamin</label>
+                                            <select class="form-control" id="jk" name="jk"
+                                                @if ($status != 'belum') disabled @endif>
+                                                <option value="">Pilih Jenis Kelamin</option>
+                                                <option value="L" @if ($peserta->jk == 'L') selected @endif>
+                                                    Laki-laki</option>
+                                                <option value="P" @if ($peserta->jk == 'P') selected @endif>
+                                                    Perempuan</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tgl_lahir">Tanggal Lahir</label>
+                                            <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir"
+                                                value="{{ $peserta->tgl_lahir }}"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="agama">Agama</label>
+                                            <select class="form-control" id="agama" name="agama"
+                                                @if ($status != 'belum') disabled @endif>
+                                                <option value="">Pilih Agama</option>
+                                                <option value="islam" @if ($peserta->agama == 'islam') selected @endif>
+                                                    Islam</option>
+                                                <option value="kristen" @if ($peserta->agama == 'kristen') selected @endif>
+                                                    Kristen</option>
+                                                <option value="hindu" @if ($peserta->agama == 'hindu') selected @endif>
+                                                    Hindu</option>
+                                                <option value="buddha" @if ($peserta->agama == 'buddha') selected @endif>
+                                                    Buddha</option>
+                                                <option value="konghucu"
+                                                    @if ($peserta->agama == 'konghucu') selected @endif>Konghucu</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="provinsi">Provinsi</label>
+                                            <select class="form-control" id="provinsi" name="provinsi_id"
+                                                onchange="filterKabupaten()"
+                                                @if ($status != 'belum') disabled @endif>
+                                                <option value="">Pilih Provinsi</option>
+                                                @foreach ($provinsi as $prov)
+                                                    <option value="{{ $prov->id }}"
+                                                        @if ($peserta->provinsi_id == $prov->id) selected @endif>
+                                                        {{ $prov->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="kabupaten">Kabupaten</label>
+                                            <select class="form-control" id="kabupaten" name="kabupaten_id"
+                                                @if ($status != 'belum') disabled @endif>
+                                                <option value="">Pilih Kabupaten</option>
+                                                @foreach ($kabupaten as $kab)
+                                                    <option value="{{ $kab->id }}"
+                                                        @if ($peserta->kabupaten_id == $kab->id) selected @endif>
+                                                        {{ $kab->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="no_tlp">Nomor Telepon</label>
+                                            <input type="text" class="form-control" id="no_tlp" name="no_tlp"
+                                                value="{{ $peserta->no_tlp }}"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="sosial_media">Akun Media Sosial</label>
+                                            <textarea class="form-control" id="sosial_media" name="sosial_media" rows="3"
+                                                @if ($status != 'belum') disabled @endif>{{ $peserta->sosial_media }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pekerjaan">Pekerjaan</label>
+                                            <input type="text" class="form-control" id="pekerjaan" name="pekerjaan"
+                                                value="{{ $peserta->pekerjaan }}"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="latar_belakang">Latar Belakang</label>
+                                            <textarea class="form-control" id="latar_belakang" name="latar_belakang" rows="3"
+                                                @if ($status != 'belum') disabled @endif>{{ $peserta->latar_belakang }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="peran_organisasi">Organisasi Peran Dan Periode</label>
+                                            <textarea class="form-control" id="peran_organisasi" name="peran_organisasi" rows="3"
+                                                @if ($status != 'belum') disabled @endif>{{ $peserta->peran_organisasi }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="isPertukaran">Program Pertukaran</label>
+                                            <input type="checkbox" id="isPertukaran" name="isPertukaran" value="1"
+                                                @if ($peserta->isPertukaran) checked @endif
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="motivasi">Motivasi Mengikuti Program PPAN Periode Sekarang</label>
+                                            <textarea class="form-control" id="motivasi" name="motivasi" rows="3"
+                                                @if ($status != 'belum') disabled @endif>{{ $peserta->motivasi }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="essay" class="form-label">Essay</label>
-                                    <textarea class="form-control" id="essay" name="desc_essai" rows="3">{{ old('desc_essai', $peserta->desc_essai ?? '') }}</textarea>
-                                    @error('desc_essai')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="exchange_program"
-                                        name="isPertukaran"
-                                        {{ old('isPertukaran', $peserta->isPertukaran ?? false) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="exchange_program">Program Pertukaran </label>
-                                    @error('isPertukaran')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="motivasi" class="form-label">Motivasi</label>
-                                    <textarea class="form-control" id="motivasi" name="motivasi_essai" rows="3">{{ old('motivasi_essai', $peserta->motivasi_essai ?? '') }}</textarea>
-                                    @error('motivasi_essai')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Berkas</h4>
+                                        <div class="form-group">
+                                            <label for="file_ijazah">Upload Ijazah*</label>
+                                            @if ($peserta->file_ijazah)
+                                                <a href="{{ Storage::url($peserta->file_ijazah) }}" target="_blank">Lihat
+                                                    Ijazah</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_ijazah"
+                                                name="file_ijazah" accept=".pdf, .jpg, .png"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_ktp">Upload KTP*</label>
+                                            @if ($peserta->file_ktp)
+                                                <a href="{{ Storage::url($peserta->file_ktp) }}" target="_blank">Lihat
+                                                    KTP</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_ktp" name="file_ktp"
+                                                accept=".jpg, .png" @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_cv">Upload CV*</label>
+                                            @if ($peserta->file_cv)
+                                                <a href="{{ Storage::url($peserta->file_cv) }}" target="_blank">Lihat
+                                                    CV</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_cv" name="file_cv"
+                                                accept=".pdf" @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_transkrip">Upload Transkrip*</label>
+                                            @if ($peserta->file_transkrip)
+                                                <a href="{{ Storage::url($peserta->file_transkrip) }}"
+                                                    target="_blank">Lihat Transkrip</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_transkrip"
+                                                name="file_transkrip" accept=".pdf"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_kegiatan_sosial">Upload Kegiatan Sosial*</label>
+                                            @if ($peserta->file_kegiatan_sosial)
+                                                @foreach (json_decode($peserta->file_kegiatan_sosial) as $file)
+                                                    <a href="{{ Storage::url($file) }}" target="_blank">Lihat Kegiatan
+                                                        Sosial</a><br>
+                                                @endforeach
+                                            @endif
+                                            <input type="file" class="form-control" id="file_kegiatan_sosial"
+                                                name="file_kegiatan_sosial[]" multiple
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_penghargaan">Upload Penghargaan*</label>
+                                            @if ($peserta->file_penghargaan)
+                                                @foreach (json_decode($peserta->file_penghargaan) as $file)
+                                                    <a href="{{ Storage::url($file) }}" target="_blank">Lihat
+                                                        Penghargaan</a><br>
+                                                @endforeach
+                                            @endif
+                                            <input type="file" class="form-control" id="file_penghargaan"
+                                                name="file_penghargaan[]" multiple
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file_surat_rekomendasi">Upload Surat Rekomendasi (Jika Ada)</label>
+                                            @if ($peserta->file_surat_rekomendasi)
+                                                <a href="{{ Storage::url($peserta->file_surat_rekomendasi) }}"
+                                                    target="_blank">Lihat Surat Rekomendasi</a>
+                                            @endif
+                                            <input type="file" class="form-control" id="file_surat_rekomendasi"
+                                                name="file_surat_rekomendasi" accept=".pdf"
+                                                @if ($status != 'belum') disabled @endif>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <!-- Tab Dokumen -->
-                            <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
-                                <div class="mb-3">
-                                    <label for="file_ktp" class="form-label">KTP</label>
-                                    @if ($peserta && $peserta->file_ktp)
-                                        <div>
-                                            <a href="{{ asset('storage/documents/' . $peserta->file_ktp) }}"
-                                                class="btn btn-sm btn-primary" target="_blank">Download KTP</a>
-                                        </div>
-                                    @else
-                                        <input type="file" class="form-control" id="file_ktp" name="file_ktp">
-                                        @error('file_ktp')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    @endif
-                                </div>
-                                <div class="mb-3">
-                                    <label for="file_cv" class="form-label">CV</label>
-                                    @if ($peserta && $peserta->file_cv)
-                                        <div>
-                                            <a href="{{ asset('storage/documents/' . $peserta->file_cv) }}"
-                                                class="btn btn-sm btn-primary" target="_blank">Download CV</a>
-                                        </div>
-                                    @else
-                                        <input type="file" class="form-control" id="file_cv" name="file_cv">
-                                        @error('file_cv')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    @endif
-                                </div>
-                                <div class="mb-3">
-                                    <label for="file_ijazah" class="form-label">Ijazah</label>
-                                    @if ($peserta && $peserta->file_ijazah)
-                                        <div>
-                                            <a href="{{ asset('storage/documents/' . $peserta->file_ijazah) }}"
-                                                class="btn btn-sm btn-primary" target="_blank">Download Ijazah</a>
-                                        </div>
-                                    @else
-                                        <input type="file" class="form-control" id="file_ijazah" name="file_ijazah">
-                                        @error('file_ijazah')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    @endif
-                                </div>
-                                <!-- Handle multiple file uploads if needed -->
-                                <div class="mb-3">
-                                    <label for="file_kegiatan_sosial" class="form-label">File Kegiatan Sosial</label>
-                                    @if ($peserta && $peserta->file_kegiatan_sosial)
-                                        @foreach (json_decode($peserta->file_kegiatan_sosial) as $file)
-                                            <div>
-                                                <a href="{{ asset('storage/documents/' . $file) }}"
-                                                    class="btn btn-sm btn-primary" target="_blank">Download File</a>
-                                            </div>
-                                        @endforeach
-                                    @endif
-
-                                </div>
-                                <div class="mb-3">
-                                    <label for="file_score_report" class="form-label">Laporan Nilai</label>
-                                    @if ($peserta && $peserta->file_score_report)
-                                        <div>
-                                            <a href="{{ asset('storage/documents/' . $peserta->file_score_report) }}"
-                                                class="btn btn-sm btn-primary" target="_blank">Download Laporan Nilai</a>
-                                        </div>
-                                    @endif
-                                </div>
-                                <!-- Handle JSON file uploads if needed -->
-                                <div class="mb-3">
-                                    <label for="file_penghargaan" class="form-label">File Penghargaan</label>
-                                    @if ($peserta && $peserta->file_penghargaan)
-                                        @foreach (json_decode($peserta->file_penghargaan) as $file)
-                                            <div>
-                                                <a href="{{ asset('storage/documents/' . $file) }}"
-                                                    class="btn btn-sm btn-primary" target="_blank">Download File</a>
-                                            </div>
-                                        @endforeach
-                                    @endif
-
-                                </div>
-                            </div>
-
                         </div>
+                       
                     </form>
-                </div>
             </div>
         </div>
         <!--/ Layout Demo -->

@@ -43,8 +43,9 @@ class BerkasController extends Controller
   {
     $data = User::find($id);
     $provinsi = Province::all();
+    $kabupaten = Regency::all();
     $peserta = $data->peserta;
-    return view('admin.berkas.show', compact('data', 'peserta', 'provinsi'));
+    return view('admin.berkas.show', compact('data', 'peserta', 'provinsi', 'kabupaten'));
   }
 
   public function penilaian_kabupaten(Request $request)
