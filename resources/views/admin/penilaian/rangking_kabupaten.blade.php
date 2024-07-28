@@ -125,7 +125,7 @@
                             </td>
                             <td>
                                 <button
-                                    onclick="window.location.href='{{ route('pendaftaran.berkas.show', $item['peserta']->user->id) }}'"
+                                    onclick="window.location.href='{{ route('rangking.show.kab', $item['peserta']->id) }}'"
                                     type="button" class="btn btn-icon btn-outline-warning" title="Lihat">
                                     <span class="tf-icons bx bx-show"></span>
                                 </button>

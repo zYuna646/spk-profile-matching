@@ -25,6 +25,165 @@ class PenilaiController extends Controller
     return view('admin.penilai.index', compact('data'));
   }
 
+  public function show_detail_kab($id)
+  {
+    $selisih = [
+      0 => 5,
+      1 => 4.5,
+      -1 => 4,
+      2 => 3.5,
+      -2 => 3,
+      3 => 2.5,
+      -3 => 2,
+      4 => 1.5,
+      -4 => 1,
+    ];
+
+    $bobot = [
+      1 => 0.5,
+      2 => 0.6,
+      3 => 0.7,
+      4 => 0.8,
+      5 => 0.9,
+    ];
+
+    $t_1 = [];
+    $t_2 = [];
+    $t_3 = [];
+    $t_4 = [];
+    $peserta = Peserta::find($id);
+    $penilaian = Penilaian::where('peserta_id', $peserta->id)
+      ->where('isKabupaten', true)
+      ->first();
+    foreach ($penilaian->nilai as $key => $value) {
+      $group_nilai[$value->sub_kriteria->kriteria->id][$value->sub_kriteria->id] = $value->nilai;
+    }
+    $t_1 = $group_nilai;
+
+    foreach (subKriteria::all() as $key => $sub) {
+      $t_2[$sub->kriteria->id][$sub->id] = $group_nilai[$sub->kriteria->id][$sub->id] - $sub->bobot;
+      $group_nilai[$sub->kriteria->id][$sub->id] = $group_nilai[$sub->kriteria->id][$sub->id] - $sub->bobot;
+      $group_nilai[$sub->kriteria->id][$sub->id] = $selisih[$group_nilai[$sub->kriteria->id][$sub->id]];
+    }
+    $t_3 = $group_nilai;
+
+    $nilai = [];
+    foreach (Kriteria::all() as $key => $kriteria) {
+      $cf = [];
+      $sf = [];
+
+      foreach ($kriteria->subKriteria as $subKriteria) {
+        if ($subKriteria->isCF) {
+          $cf[] = $group_nilai[$kriteria->id][$subKriteria->id];
+        } else {
+          $sf[] = $group_nilai[$kriteria->id][$subKriteria->id];
+        }
+      }
+
+      // Calculate the average of CF and SF
+      $cfSum = array_sum($cf);
+      $sfSum = array_sum($sf);
+
+      $nilai[$kriteria->id][0] = $cfSum / count($cf);
+      $nilai[$kriteria->id][1] = $sfSum / count($sf);
+      $nilai[$kriteria->id][2] = 0.6 * $nilai[$kriteria->id][0] + 0.4 * $nilai[$kriteria->id][1];
+    }
+    $t_4 = $nilai;
+    $tmp = [];
+    foreach (Kriteria::all() as $key => $value) {
+      $tmp[] = $nilai[$value->id][2] * $value->bobot;
+    }
+
+    $rangking[$peserta->id] = [
+      'nilai' => array_sum($tmp),
+      'peserta' => $peserta,
+    ];
+    $hasil = array_sum($tmp);
+    $kriteria = Kriteria::all();
+    // dd($t_1, $t_2, $t_3, $t_4);
+    return view('admin.penilaian.show', compact('t_1', 't_2', 't_3', 't_4', 'kriteria', 'rangking', 'hasil'));
+  }
+
+  public function show_detail_prov($id)
+  {
+    $selisih = [
+      0 => 5,
+      1 => 4.5,
+      -1 => 4,
+      2 => 3.5,
+      -2 => 3,
+      3 => 2.5,
+      -3 => 2,
+      4 => 1.5,
+      -4 => 1,
+    ];
+
+    $bobot = [
+      1 => 0.5,
+      2 => 0.6,
+      3 => 0.7,
+      4 => 0.8,
+      5 => 0.9,
+    ];
+
+    $t_1 = [];
+    $t_2 = [];
+    $t_3 = [];
+    $t_4 = [];
+    $peserta = Peserta::find($id);
+    $penilaian = Penilaian::where('peserta_id', $peserta->id)
+      ->where('isKabupaten', false)
+      ->first();
+    foreach ($penilaian->nilai as $key => $value) {
+      $group_nilai[$value->sub_kriteria->kriteria->id][$value->sub_kriteria->id] = $value->nilai;
+    }
+    $t_1 = $group_nilai;
+
+    foreach (subKriteria::all() as $key => $sub) {
+      $t_2[$sub->kriteria->id][$sub->id] = $group_nilai[$sub->kriteria->id][$sub->id] - $sub->bobot;
+      $group_nilai[$sub->kriteria->id][$sub->id] = $group_nilai[$sub->kriteria->id][$sub->id] - $sub->bobot;
+      $group_nilai[$sub->kriteria->id][$sub->id] = $selisih[$group_nilai[$sub->kriteria->id][$sub->id]];
+    }
+    $t_3 = $group_nilai;
+
+    $nilai = [];
+    foreach (Kriteria::all() as $key => $kriteria) {
+      $cf = [];
+      $sf = [];
+
+      foreach ($kriteria->subKriteria as $subKriteria) {
+        if ($subKriteria->isCF) {
+          $cf[] = $group_nilai[$kriteria->id][$subKriteria->id];
+        } else {
+          $sf[] = $group_nilai[$kriteria->id][$subKriteria->id];
+        }
+      }
+
+      // Calculate the average of CF and SF
+      $cfSum = array_sum($cf);
+      $sfSum = array_sum($sf);
+
+      $nilai[$kriteria->id][0] = $cfSum / count($cf);
+      $nilai[$kriteria->id][1] = $sfSum / count($sf);
+      $nilai[$kriteria->id][2] = 0.6 * $nilai[$kriteria->id][0] + 0.4 * $nilai[$kriteria->id][1];
+    }
+    $t_4 = $nilai;
+    $tmp = [];
+    foreach (Kriteria::all() as $key => $value) {
+      $tmp[] = $nilai[$value->id][2] * $value->bobot;
+    }
+
+    $rangking[$peserta->id] = [
+      'nilai' => array_sum($tmp),
+      'peserta' => $peserta,
+    ];
+    $hasil = array_sum($tmp);
+    $kriteria = Kriteria::all();
+    // dd($t_1, $t_2, $t_3, $t_4);
+    return view('admin.penilaian.show', compact('t_1', 't_2', 't_3', 't_4', 'kriteria', 'rangking', 'hasil'));
+  }
+
+
   public function create()
   {
     return view('admin.penilai.create');
@@ -294,11 +453,13 @@ class PenilaiController extends Controller
       foreach (Kriteria::all() as $key => $value) {
         $tmp[] = $nilai[$value->id][2] * $value->bobot;
       }
+
       $rangking[$peserta->id] = [
         'nilai' => array_sum($tmp),
         'peserta' => $peserta,
       ];
     }
+
 
     usort($rangking, function ($a, $b) {
       return $b['nilai'] <=> $a['nilai'];

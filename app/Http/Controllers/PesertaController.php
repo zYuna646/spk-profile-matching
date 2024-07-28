@@ -141,7 +141,7 @@ class PesertaController extends Controller
     // Validate the incoming request data
     $request->validate([
       'jk' => 'required|string',
-      'tgl_lahir' => 'required|date',
+      'tgl_lahir' => 'required',
       'agama' => 'nullable|string',
       'provinsi_id' => 'nullable|exists:provinces,id',
       'kabupaten_id' => 'nullable|exists:regencies,id',
@@ -169,6 +169,7 @@ class PesertaController extends Controller
     //   $fotoPath = $request->file('foto')->store('public/fotos');
     //   $peserta->foto = basename($fotoPath);
     // }
+    $peserta->peran_organisasi = $request->peran_organisasi;
     $peserta->jk = $request->jk;
     $peserta->tgl_lahir = $request->tgl_lahir;
     $peserta->agama = $request->agama;
@@ -184,32 +185,32 @@ class PesertaController extends Controller
     $peserta->foto = $request->foto;
 
     if ($request->hasFile('file_ijazah')) {
-      $peserta->file_ijazah = $request->file('file_ijazah')->store('uploads');
+      $peserta->file_ijazah = $request->file('file_ijazah')->store('uploads', 'public');
     }
     if ($request->hasFile('file_ktp')) {
-      $peserta->file_ktp = $request->file('file_ktp')->store('uploads');
+      $peserta->file_ktp = $request->file('file_ktp')->store('uploads', 'public');
     }
     if ($request->hasFile('foto')) {
-      $peserta->foto = $request->file('foto')->store('uploads');
+      $peserta->foto = $request->file('foto')->store('uploads', 'public');
     }
     if ($request->hasFile('file_cv')) {
-      $peserta->file_cv = $request->file('file_cv')->store('uploads');
+      $peserta->file_cv = $request->file('file_cv')->store('uploads', 'public');
     }
     if ($request->hasFile('file_transkrip')) {
-      $peserta->file_score_report = $request->file('file_transkrip')->store('uploads');
+      $peserta->file_score_report = $request->file('file_transkrip')->store('uploads', 'public');
     }
     if ($request->hasFile('file_kegiatan_sosial')) {
       $peserta->file_kegiatan_sosial = json_encode(array_map(function ($file) {
-        return $file->store('uploads');
+        return $file->store('uploads', 'public');
       }, $request->file('file_kegiatan_sosial')));
     }
     if ($request->hasFile('file_penghargaan')) {
       $peserta->file_penghargaan = json_encode(array_map(function ($file) {
-        return $file->store('uploads');
+        return $file->store('uploads', 'public');
       }, $request->file('file_penghargaan')));
     }
     if ($request->hasFile('file_surat_rekomendasi')) {
-      $peserta->file_surat_rekomendasi = $request->file('file_surat_rekomendasi')->store('uploads');
+      $peserta->file_surat_rekomendasi = $request->file('file_surat_rekomendasi')->store('uploads', 'public');
     }
 
 

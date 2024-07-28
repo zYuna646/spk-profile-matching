@@ -70,6 +70,6 @@ class Peserta extends Model
 
   public function pendaftaran()
   {
-    return $this->belongsTo(Pendaftaran::class);
+    return $this->belongsTo(Pendaftaran::class, 'pendaftaran_id');
   }
 }

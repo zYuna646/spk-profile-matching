@@ -50,7 +50,6 @@ class VerificatorController extends Controller
 
   public function edit(User $user)
   {
-    dd($user);
     return view('admin.administrator.edit', compact('user'));
   }
 

@@ -35,7 +35,6 @@
                     <tr>
                         <th>Email</th>
                         <th>Nama</th>
-                        <th>Alamat</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -44,7 +43,6 @@
                         <tr>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->alamat }}</td>
                             <td>
                                 <!-- Show button -->
                                 <button onclick="window.location.href='{{ route('peserta.users.show', $item) }}'"

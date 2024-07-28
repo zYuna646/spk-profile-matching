@@ -58,7 +58,10 @@ use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 // Main Page Route
-Route::get('/', [AuthController::class, 'login'])->name('dashboard-analytics');
+Route::get('/', [DashboardController::class, 'home'])->name('dashboard.home');
+Route::get('/home/alumni', [DashboardController::class, 'alumni'])->name('dashboard.alumni');
+
+
 
 // authentication
 Route::get('/auth/login', [AuthController::class, 'login'])->name('login');
@@ -79,6 +82,8 @@ Route::get('/get-kelurahan/{idKelurahan}', [WilayahController::class, 'getKelura
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard/peserta', [DashboardController::class, 'peserta'])->name('dashboard.peserta');
 Route::get('/dashboard/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
+Route::get('/dashboard/status', [DashboardController::class, 'status'])->name('dashboard.status');
+
 
 // administrator
 Route::prefix('administrator')
@@ -135,6 +140,8 @@ Route::get('penilaian/kabupaten', [BerkasController::class, 'penilaian_kabupaten
 Route::get('penilaian/provinsi', [BerkasController::class, 'penilaian_provinsi'])->name('penilaian.provinsi');
 Route::get('rangking/provinsi', [BerkasController::class, 'rangking_provinsi'])->name('rangking.provinsi');
 Route::get('rangking/kabupaten', [BerkasController::class, 'rangking_kabupaten'])->name('rangking.kabupaten');
+Route::get('rangking/show/kab/{id}',[PenilaiController::class, 'show_detail_kab'] )->name('rangking.show.kab');
+Route::get('rangking/show/prov/{id}',[PenilaiController::class, 'show_detail_prov'] )->name('rangking.show.prov');
 Route::post('update/kriteria', [PenilaiController::class, 'update_kriteria'])->name('update.kriteria');
 Route::post('penilain/kabupaten/{id}', [PenilaiController::class, 'penilaian_kabupaten'])->name(
   'penilaian.update.kabupaten'

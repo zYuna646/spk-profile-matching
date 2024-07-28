@@ -57,24 +57,24 @@
         },
         {
           "url": "penilai/users",
-          "name": "penilai",
-          "slug": "penilai",
+          "name": "Penilai",
+          "slug": "Penilai",
           "role": [
             "Admin"
           ]
         },
         {
           "url": "pimpinan/users",
-          "name": "pimpinan",
-          "slug": "pimpinan",
+          "name": "Pimpinan",
+          "slug": "Pimpinan",
           "role": [
             "Admin"
           ]
         },
         {
           "url": "peserta/users",
-          "name": "peserta",
-          "slug": "peserta",
+          "name": "Peserta",
+          "slug": "Peserta",
           "role": [
             "Admin",
             "verificator"
@@ -117,7 +117,7 @@
         },
         {
           "url": "peserta/users/status/lolos-seleksi-umum",
-          "name": "Lolos Seleksi Umum",
+          "name": "Lolos Seleksi Administrasi",
           "slug": "pimpinan",
           "role": [
             "Admin",
@@ -151,7 +151,7 @@
        
         {
           "url": "peserta/users/status/gugur-seleksi-umum",
-          "name": "Gugur Seleksi Umum",
+          "name": "Gugur Seleksi Administrasi",
           "slug": "peserta",
           "role": [
             "Admin",

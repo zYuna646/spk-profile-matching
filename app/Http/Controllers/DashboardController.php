@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumni;
 use App\Models\Kriteria;
 use App\Models\Province;
 use App\Models\Regency;
@@ -24,10 +25,27 @@ class DashboardController extends Controller
     return view('content.dashboard.dashboards-analytics', compact('data'));
   }
 
+  public function home()
+  {
+    $alumni = Alumni::take(4)->get();
+    return view('home.index', compact('alumni'));
+  }
+
+  public function alumni()
+  {
+    $alumni = Alumni::all();
+    return view('home.shop', compact('alumni'));
+  }
+
   public function peserta()
   {
-    $provinsi = Province::all();
+  $provinsi = Province::all();
     return view('content.dashboard.dashboards-peserta', compact('provinsi'));
+  }
+
+  public function status()
+  {
+    return view('content.dashboard.status');
   }
 
   public function upload()

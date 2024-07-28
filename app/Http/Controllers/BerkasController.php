@@ -24,17 +24,16 @@ class BerkasController extends Controller
 
     // Fetch users with 'peserta' role and apply filters if needed
     $data = User::where('role_id', $role->id)
-      ->when($request->filled('periode'), function ($query) use ($request) {
-        $query->whereHas('peserta', function ($subQuery) use ($request) {
-          $subQuery->where('pendaftaran_id', $request->periode);
-        });
-      })
-      ->when($request->filled('status'), function ($query) use ($request) {
-        $query->whereHas('peserta', function ($subQuery) use ($request) {
-          $subQuery->where('status_berkas', $request->status);
-        });
-      })
-      ->get();
+    ->whereHas('peserta', function ($query) use ($request) {
+        if ($request->filled('periode')) {
+            $query->where('pendaftaran_id', $request->periode);
+        }
+        if ($request->filled('status')) {
+            $query->where('status_berkas', $request->status);
+        }
+        $query->where('status_berkas', '!=', 'belum');
+    })
+    ->get(); 
 
     return view('admin.berkas.index', compact('data', 'periodes'));
   }
@@ -57,7 +56,7 @@ class BerkasController extends Controller
 
     // Get peserta where status_berkas is 'terima' and status is 'mengajukan-berkas'
     $data = Peserta::where('status_berkas', 'terima')
-      ->where('status', '!=' , 'peserta-baru')->orWhere('status', '!=', 'mengajukan-berkas')
+      ->where('status', '!=' , 'peserta-baru')->Where('status', '!=', 'mengajukan-berkas')
       ->when($request->filled('kabupaten'), function ($query) use ($request) {
         $query->where('kabupaten_id', $request->kabupaten);
       })
@@ -189,6 +188,7 @@ class BerkasController extends Controller
       foreach (Kriteria::all() as $key => $value) {
         $tmp[] = $nilai[$value->id][2] * $value->bobot;
       }
+
       $rangking[$peserta->id] = [
         'nilai' => array_sum($tmp),
         'peserta' => $peserta,
@@ -286,10 +286,12 @@ class BerkasController extends Controller
         $nilai[$kriteria->id][1] = $sfSum / count($sf);
         $nilai[$kriteria->id][2] = 0.6 * $nilai[$kriteria->id][0] + 0.4 * $nilai[$kriteria->id][1];
       }
+
       $tmp = [];
       foreach (Kriteria::all() as $key => $value) {
         $tmp[] = $nilai[$value->id][2] * $value->bobot;
       }
+
       $rangking[$peserta->id] = [
         'nilai' => array_sum($tmp),
         'peserta' => $peserta,
