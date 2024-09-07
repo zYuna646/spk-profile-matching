@@ -109,6 +109,7 @@ Route::prefix('peserta')
   ->group(function () {
     Route::get('users/status/{status}', [PesertaController::class, 'status'])->name('users.status');
     Route::resource('users', PesertaController::class);
+    Route::post('users/{user}', [PesertaController::class, 'update'])->name('users.update');
   });
 
 Route::prefix('pendaftaran')

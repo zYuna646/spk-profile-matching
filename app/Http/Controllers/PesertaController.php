@@ -90,7 +90,6 @@ class PesertaController extends Controller
     if ($request->filled('password')) {
       $user->password = bcrypt($request->password);
     }
-
     // Simpan perubahan
     $user->save();
 
