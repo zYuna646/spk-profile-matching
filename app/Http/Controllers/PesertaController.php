@@ -163,11 +163,7 @@ class PesertaController extends Controller
     $user = Auth::user();
     $peserta = $user->peserta;
 
-    // Handle the uploaded photo
-    // if ($request->hasFile('foto')) {
-    //   $fotoPath = $request->file('foto')->store('public/fotos');
-    //   $peserta->foto = basename($fotoPath);
-    // }
+
     $peserta->peran_organisasi = $request->peran_organisasi;
     $peserta->jk = $request->jk;
     $peserta->tgl_lahir = $request->tgl_lahir;
