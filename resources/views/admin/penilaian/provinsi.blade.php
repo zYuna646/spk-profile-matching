@@ -74,11 +74,15 @@
                             <td>{{ $item->provinsi->name }}</td>
                             <td>{{ $item->kabupaten->name }}</td>
                             <td>
+                                @if ($item->penilainProvinsi->nilai)
+                                    <span class="badge bg-success">Selesai</span>
+                                @else
+                                    <button type="button" class="btn btn-icon btn-outline-primary" title="Penilaian"
+                                        data-bs-toggle="modal" data-bs-target="#assessmentModalTambah{{ $item->id }}">
+                                        <span class="tf-icons bx bx-pencil"></span>
+                                    </button>
+                                @endif
 
-                                <button type="button" class="btn btn-icon btn-outline-primary" title="Penilaian"
-                                    data-bs-toggle="modal" data-bs-target="#assessmentModalTambah{{ $item->id }}">
-                                    <span class="tf-icons bx bx-pencil"></span>
-                                </button>
 
                                 <!-- Modal for adding assessment -->
                                 <div class="modal fade" id="assessmentModalTambah{{ $item->id }}" tabindex="-1"

@@ -99,7 +99,8 @@
                             <td>{{ $item['peserta']->kabupaten->name }}</td>
                             <td>{{ $item['nilai'] }}</td>
                             <td>
-                                @if ($item['peserta']->status_kabupaten == true)
+                                {{-- @dump($item['peserta']) --}}
+                                @if ($item['peserta']->status == 'lolos-seleksi-kabupaten' || $item['peserta']->status == 'lolos-seleksi-provinsi' || $item['peserta']->status == 'gugur-seleksi-provinsi')
                                     <span class="badge bg-success">Diterima</span>
                                 @elseif ($item['peserta']->status == 'gugur-seleksi-kabupaten')
                                     <span class="badge bg-danger">Ditolak</span>

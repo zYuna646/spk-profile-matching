@@ -60,7 +60,7 @@ class Peserta extends Model
 
   public function penilainProvinsi()
   {
-    return $this->hasMany(Penilaian::class)->where('isKabupaten', false);
+    return $this->hasOne(Penilaian::class)->where('isKabupaten', false);
   }
 
   public function provinsi()
